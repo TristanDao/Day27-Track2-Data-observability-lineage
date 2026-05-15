@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from urllib import request
 
-from src.config import DISCORD_WEBHOOK_URL, OUTPUT_DIR, VALID_STATUSES
+from src.config import DISCORD_WEBHOOK_URL, OUTPUT_DIR, VALID_STATUSES, STUDENT_NAME, STUDENT_ID
 
 
 class LabValidationError(RuntimeError):
@@ -64,7 +64,10 @@ def send_discord_message(summary: dict[str, int | str], webhook_url: str = DISCO
         return
 
     message = (
-        f"Sales Data Quality {summary['validation_status'].upper()}\n"
+        f"**Lab Submission - Data Quality Pipeline**\n"
+        f"**Student:** {STUDENT_NAME} | **{STUDENT_ID}**\n"
+        f"─────────────────────\n"
+        f"**Sales Data Quality {summary['validation_status'].upper()}**\n"
         f"Rows: {summary['row_count']}\n"
         f"Missing customer_id: {summary['missing_customer_ids']}\n"
         f"Invalid amounts: {summary['invalid_amounts']}\n"
@@ -74,7 +77,10 @@ def send_discord_message(summary: dict[str, int | str], webhook_url: str = DISCO
     http_request = request.Request(
         webhook_url,
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        },
         method="POST",
     )
     with request.urlopen(http_request, timeout=15) as response:

@@ -182,3 +182,10 @@ airflow_project/
 - Local validation flow: ready
 - Reference Airflow logic: verified separately
 - Real Discord delivery: depends on a valid webhook URL
+
+---
+
+## Submission
+
+**Student:** Đào Phước Thịnh
+**Student ID:** 2A202600029
